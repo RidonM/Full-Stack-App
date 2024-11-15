@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const booksController = require("./controllers/bookController");
+const authController = require('./controllers/authController');
 const app = express();
 app.use(
   cors({
@@ -10,5 +11,6 @@ app.use(
 );
 
 app.use("/books", booksController);
+app.use("/auth", authController);
 
 app.listen(8585);

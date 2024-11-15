@@ -1,39 +1,44 @@
-import React, { useState } from "react";
-
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  async function handleSubmit(event){
+    event.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+    let formData = new window.FormData(event.target);
+
+    let urlencoded = new URLSearchParams(formData).toString();
+
+    const response = await fetch('http://localhost:8585/auth/login', {
+      method: 'post',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: urlencoded
+    });
+
+    const json = await response.json();
+
+    if (!json.success){
+      alert('Wrong credentials');
+    }
+    else{
+      localStorage.setItem('token', json.token);
+    }
+  }
 
   return (
     <div className="auth-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
+          type="text"
+          name="username"
+          placeholder="Username"
           required
         />
         <input
           type="password"
           name="password"
           placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
           required
         />
         <button type="submit" className="auth-button">
