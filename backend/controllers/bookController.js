@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("express").Router();
 const bookRepository = require("../repositories/booksRepository");
+const authMiddleware = require('../middleware/auth');
 
 router.use(express.json());
 
@@ -22,7 +23,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-router.get("/", (req, res) => {
+router.get("/", authMiddleware.authenticate, (req, res) => {
   const books = bookRepository.getAllBooks();
 
   res.status(200).json({
