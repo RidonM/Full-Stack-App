@@ -1,18 +1,23 @@
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: ''
+  });
 
   async function handleSubmit(event){
     event.preventDefault();
 
-    let formData = new window.FormData(event.target);
-
-    let urlencoded = new URLSearchParams(formData).toString();
-
     const response = await fetch('http://localhost:8585/auth/login', {
       method: 'post',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"
       },
-      body: urlencoded
+      body: JSON.stringify(credentials)
     });
 
     const json = await response.json();
@@ -21,7 +26,8 @@ const Login = () => {
       alert('Wrong credentials');
     }
     else{
-      localStorage.setItem('token', json.token);
+      // localStorage.setItem('token', json.token);
+      alert(`Got new token ${json.data.token} which will expire on ${json.data.expiryDate}`)
     }
   }
 
@@ -31,6 +37,8 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="text"
+          value={credentials.username}
+          onChange={(e) => setCredentials({...credentials, username: e.target.value})}
           name="username"
           placeholder="Username"
           required
@@ -38,6 +46,8 @@ const Login = () => {
         <input
           type="password"
           name="password"
+          value={credentials.password}
+          onChange={(e) => setCredentials({...credentials, password: e.target.value})}
           placeholder="Password"
           required
         />

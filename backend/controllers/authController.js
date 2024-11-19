@@ -1,11 +1,9 @@
 const router = require('express').Router();
 const express = require('express');
 const userRepository = require('../repositories/userRepository');
-const utils = require('../utils');
+const tokenRepository = require('../repositories/tokenRepository');
 
-router.tokens = new Map();
-
-router.post('/login', express.urlencoded(), (req, res) => {
+router.post('/login', express.json(), (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
@@ -18,13 +16,14 @@ router.post('/login', express.urlencoded(), (req, res) => {
         });
     }
 
-    const token = utils.generateRandomString(60);
-
-    router.tokens.set(token, user.id);
+    const {token, expiryDate} = tokenRepository.newTokenForUser(user.id);
 
     return res.status(200).json({
         success: true,
-        token: token
+        data: {
+            token: token,
+            expiryDate: expiryDate
+        }
     });
 });
 

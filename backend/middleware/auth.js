@@ -1,5 +1,5 @@
-const authController = require('../controllers/authController');
 const userRepository = require('../repositories/userRepository');
+const tokenRepository = require('../repositories/tokenRepository');
 
 exports.authenticate = (req, res, next) => {
     const token = req.headers['Token'];
@@ -11,16 +11,16 @@ exports.authenticate = (req, res, next) => {
         });
     }
 
-    const userId = authController.tokens.get(token);
+    const data = tokenRepository.getDataForToken(token)
 
-    if (!userId){
+    if (!data){
         return res.status(401).json({
             success: false,
             error: 'You dont have access to this endpoint'
         });
     }
 
-    const user = userRepository.getUserById(userId);
+    const user = userRepository.getUserById(data.userId);
 
     req.user = user;
 

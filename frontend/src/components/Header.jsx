@@ -11,9 +11,6 @@ function Header() {
             My Book Library
           </h1>
           <div className="auth-buttons">
-            <button onClick={() => navigate("/register")} className="auth-btn">
-              Register
-            </button>
             <button onClick={() => navigate("/login")} className="auth-btn">
               Login
             </button>

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = require("express").Router();
 const bookRepository = require("../repositories/booksRepository");
-const authMiddleware = require('../middleware/auth');
+const {authenticate} = require('../middleware/auth');
 
 router.use(express.json());
 
@@ -23,7 +23,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-router.get("/", authMiddleware.authenticate, (req, res) => {
+router.get("/", (req, res) => {
   const books = bookRepository.getAllBooks();
 
   res.status(200).json({
@@ -32,7 +32,7 @@ router.get("/", authMiddleware.authenticate, (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
+router.post("/", authenticate, (req, res) => {
   let newBook = req.body;
   newBook = bookRepository.createBook(newBook);
   res.status(201).json({
@@ -41,7 +41,7 @@ router.post("/", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", authenticate, (req, res) => {
   const id = req.params.id;
 
   const editedBook = bookRepository.editBookBy(id, req.body);
@@ -59,7 +59,7 @@ router.put("/:id", (req, res) => {
   });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", authenticate, (req, res) => {
   const id = req.params.id;
   bookRepository.deleteBookBy(id);
 
