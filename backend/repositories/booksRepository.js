@@ -1,4 +1,5 @@
 const { generateRandomString } = require("../utils");
+const mysql2 = require('mysql2/promise');
 
 let books = [
   {
@@ -287,8 +288,27 @@ exports.getBookById = (id) => {
   return books.find((b) => b.id == id);
 };
 
-exports.getAllBooks = () => {
-  return books;
+exports.getAllBooks = async () => {
+  const connection = await mysql2.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'root',
+    database: 'bookmanagement'
+  });
+
+  let query = 'SELECT b.id, b.isbn, b.title, b.description, b.rating, a.fullName author, g.name genre FROM books b JOIN authors a ON b.authorId = a.id JOIN genres g ON b.genreId = g.id';
+
+  try{
+      const [books] = await connection.execute(query);
+      return books;
+  }
+  catch(e){
+      console.error(e);
+  }
+  finally{
+      connection.destroy();
+  }
 };
 
 exports.createBook = (book) => {
