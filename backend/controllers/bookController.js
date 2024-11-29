@@ -32,7 +32,7 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/", authenticate, (req, res) => {
+router.post("/", (req, res) => {
   let newBook = req.body;
   newBook = bookRepository.createBook(newBook);
   res.status(201).json({
@@ -41,7 +41,7 @@ router.post("/", authenticate, (req, res) => {
   });
 });
 
-router.put("/:id", authenticate, (req, res) => {
+router.put("/:id", (req, res) => {
   const id = req.params.id;
 
   const editedBook = bookRepository.editBookBy(id, req.body);
@@ -59,7 +59,7 @@ router.put("/:id", authenticate, (req, res) => {
   });
 });
 
-router.delete("/:id", authenticate, (req, res) => {
+router.delete("/:id", (req, res) => {
   const id = req.params.id;
   bookRepository.deleteBookBy(id);
 

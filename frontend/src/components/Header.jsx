@@ -14,6 +14,9 @@ function Header() {
             <button onClick={() => navigate("/login")} className="auth-btn">
               Login
             </button>
+            <button onClick={() => navigate("/books/form")} className="auth-btn">
+              +&nbsp;Book
+            </button>
           </div>
         </div>
       </header>

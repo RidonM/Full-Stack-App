@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import BookDetails from "./components/BookDetails";
 import Login from "./components/Login";
+import BookForm from "./components/BookForm";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,6 +15,7 @@ root.render(
       <Routes>
         <Route path="/" element={<Navigate to="/books" replace />} />
         <Route path="/books" exact element={<App />} />
+        <Route path="/books/form" element={<BookForm></BookForm>} />
         <Route path="/books/:id" element={<BookDetails />} />
         <Route path="/login" element={<Login />} />
       </Routes>
